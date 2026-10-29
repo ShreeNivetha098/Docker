@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CI/CD Pipeline Using Docker</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <p class="eyebrow">Localhost college demonstration</p>
+      <h1>CI/CD Pipeline Using Docker</h1>
+      <p class="lede">
+        A small web application used to show how source code is tested,
+        packaged into a Docker image, and deployed by a Jenkins pipeline.
+      </p>
+    </div>
+    <div class="readout" aria-live="polite">
+      <p id="status" class="status status-pending">Checking deployment</p>
+      <p class="version-label">Application version</p>
+      <p id="version" class="version">—</p>
+      <p id="release" class="release">—</p>
+      <p id="started" class="started">Container start time appears after the page loads.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel" aria-labelledby="pipeline-heading">
+      <div class="section-head">
+        <h2 id="pipeline-heading">Pipeline stages</h2>
+        <p>These are the stages in the Jenkinsfile. Jenkins runs them in this order.</p>
+      </div>
+      <ol class="pipeline">
+        <li>
+          <span class="step">1</span>
+          <h3>Checkout</h3>
+          <p>Retrieve the source code from GitHub.</p>
+        </li>
+        <li>
+          <span class="step">2</span>
+          <h3>Install Dependencies</h3>
+          <p>Install the Node.js packages the application needs.</p>
+        </li>
+        <li>
+          <span class="step">3</span>
+          <h3>Test</h3>
+          <p>Run automated tests. A failure stops the pipeline.</p>
+        </li>
+        <li>
+          <span class="step">4</span>
+          <h3>Build</h3>
+          <p>Build a Docker image from the verified source.</p>
+        </li>
+        <li>
+          <span class="step">5</span>
+          <h3>Deploy</h3>
+          <p>Stop the previous container and start the new image.</p>
+        </li>
+        <li>
+          <span class="step">6</span>
+          <h3>Verify</h3>
+          <p>Request <code>/health</code> and require a successful response.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="split" aria-label="Continuous integration and continuous deployment">
+      <article class="panel explain">
+        <p class="kicker">CI</p>
+        <h2>Continuous Integration</h2>
+        <p>
+          Continuous Integration means new code is regularly combined with the
+          shared project and checked automatically. In this demo, Jenkins
+          checks out the GitHub repository, installs dependencies, and runs
+          the test suite. If a test fails, the pipeline stops before a new
+          image is deployed.
+        </p>
+        <ul>
+          <li>Checkout pulls the committed application files.</li>
+          <li>Install Dependencies runs <code>npm ci</code>.</li>
+          <li>Test runs <code>npm test</code> and fails the job on an error.</li>
+        </ul>
+      </article>
+      <article class="panel explain explain-cd">
+        <p class="kicker">CD</p>
+        <h2>Continuous Deployment</h2>
+        <p>
+          Continuous Deployment means a build that passes its checks is
+          released as the running version. Here, Jenkins builds a Docker image
+          and replaces the container that serves this page on localhost.
+          Opening or refreshing the browser shows the version that just deployed.
+        </p>
+        <ul>
+          <li>Build creates the image with Docker.</li>
+          <li>Deploy removes the previous container, then starts the new one.</li>
+          <li>Verify confirms the new container answers on port 3000.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="panel" aria-labelledby="tools-heading">
+      <div class="section-head">
+        <h2 id="tools-heading">Tools in this pipeline</h2>
+        <p>Each tool has one job. None of them is a paid or cloud service.</p>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <p class="tool">GitHub</p>
+          <h3>Source history</h3>
+          <p>
+            Git records each change. GitHub stores the repository so Jenkins
+            can check out the same commit you pushed from your computer.
+          </p>
+        </article>
+        <article class="card">
+          <p class="tool">Jenkins</p>
+          <h3>Pipeline runner</h3>
+          <p>
+            Jenkins runs the Jenkinsfile stages. For this project you start a
+            run with Build Now, unless you later enable polling.
+          </p>
+        </article>
+        <article class="card">
+          <p class="tool">Docker</p>
+          <h3>Packaged runtime</h3>
+          <p>
+            Docker builds an image that contains Node.js and this application,
+            then runs it in a container mapped to localhost port 3000.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="note">
+      <h2>What is automated</h2>
+      <p>
+        Pushing code does not, by itself, start Jenkins. You trigger the job
+        manually with <strong>Build Now</strong>. After the job starts, checkout,
+        install, test, image build, container replacement, and the health check
+        run without further clicks. You then refresh this page to see the result.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Served from the Docker container <code>cicd-pipeline-demo</code> at <code>http://localhost:3000</code>.</p>
+  </footer>
+  <script src="/app.js" defer></script>
+</body>
+</html>

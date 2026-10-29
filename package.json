@@ -1,0 +1,18 @@
+{
+  "name": "cicd-pipeline-docker",
+  "version": "1.0.0",
+  "releaseLabel": "Initial Release",
+  "description": "Beginner-friendly demonstration of a CI/CD pipeline that tests a Node.js web app, builds a Docker image, and deploys it on localhost.",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test tests/app.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
